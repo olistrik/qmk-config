@@ -9,7 +9,7 @@ services:
       - dialout
       - plugdev
     volumes:
-      - ./ez:/qmk_firmware/keyboards/planck/ez/keymaps/dockerized-ez
+      - ./ez:/qmk_firmware/keyboards/planck/keymaps/dockerized-ez
       - ./build:/qmk_firmware/.build
     devices:
      - /dev/bus/usb/001/026:/dev/bus/usb/001/026
