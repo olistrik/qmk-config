@@ -10,6 +10,7 @@ services:
       - plugdev
     volumes:
       - ./ez:/qmk_firmware/keyboards/planck/keymaps/dockerized-ez
-      - ./build:/qmk_firmware/.build
+      - ./lily58l:/qmk_firmware/keyboards/lily58/keymaps/lily58l
+      #      - ./build:/qmk_firmware/.build
     devices:
-     - /dev/bus/usb/001/026:/dev/bus/usb/001/026
+     - /dev/bus/usb/001:/dev/bus/usb/001

@@ -1,5 +1,5 @@
-KEYBOARD=planck/ez/glow
-KEYMAP=dockerized-ez
+KEYBOARD=lily58/light
+KEYMAP=dockerized-lily85L
 
 default:
 	docker-compose run qmk make $(KEYBOARD):$(KEYMAP)
