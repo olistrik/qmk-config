@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR=$(readlink -f ${BASH_SOURCE%/*})
+
+if [[ ! -f .env.local ]]; then
+  echo "Please read the README and create a .env.local"
+  exit 1
+fi
+
+source .env.local
+
+if [[ -z "$IMAGE" ]]; then
+  echo "Please read the README and specify your device mountpoint in '.env.local'"
+  exit 1
+fi
+
+if [[ -z "$DEVICES" ]]; then
+  echo "Please read the README and specify your device mountpoint in '.env.local'"
+  exit 1
+fi
+
+DIR=$(readlink -f $1)
+
+if [[ ! -f $DIR/.env.config ]]; then
+  echo "Keymap DIR Does not contain an '.env.config'. Please Read the README."
+  exit 1
+fi
+
+source $DIR/.env.config
+
+if [[ -z "$BOARD" ]]; then
+  echo "\$BOARD is not defined. Please read the README."
+  exit
+fi
+
+if [[ -z "$VARIANT" ]]; then
+  echo "\$VARIANT is not defined. Please read the README."
+  exit
+fi
+
+if [[ ! -z "$2" ]]; then
+  TARGET=$2
+fi
+
+INTERNAL="DOCKER_KEYMAP"
+
+CMD="docker run -ti --init --privileged"
+
+for group in "${ADD_GROUPS[@]}"; do
+  CMD="$CMD --group-add $group"
+done
+
+CMD="$CMD -v $SCRIPT_DIR/build:/qmk_firmware/.build"
+CMD="$CMD -v $DIR:/qmk_firmware/keyboards/$BOARD/keymaps/$INTERNAL"
+
+for device in "${DEVICES[@]}"; do
+  CMD="$CMD -v $device:$device"
+done
+
+CMD="$CMD $IMAGE make $BOARD/$VARIANT:$INTERNAL"
+
+if [[ ! -z "$TARGET" ]]; then
+  CMD="$CMD:$TARGET"
+fi
+
+echo $CMD
+$CMD

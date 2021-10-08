@@ -21,8 +21,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#define USE_I2C
-#define SPLIT_OLED_ENABLE
 #define OLED_ENABLE
 
 /* Select hand configuration */

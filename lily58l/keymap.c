@@ -130,7 +130,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 #ifdef OLED_ENABLE
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    if (!is_keyboard_left()) {
+    if (is_keyboard_master()) {
         return OLED_ROTATION_270;
     } else {
         return OLED_ROTATION_0;
@@ -272,14 +272,12 @@ void render_status_main(void) {
 }
 
 void oled_task_user(void) {
-  if(is_keyboard_master()) {
     update_log();
-    if (!is_keyboard_left()) {
+    if (is_keyboard_master()) {
         render_status_main();  // Renders the current keyboard state (layer, lock, caps, scroll, etc)
     } else {
         render_lily58_logo();
     }
-  }
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
