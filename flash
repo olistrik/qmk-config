@@ -50,7 +50,7 @@ for group in "${ADD_GROUPS[@]}"; do
   CMD="$CMD --group-add $group"
 done
 
-CMD="$CMD -v $SCRIPT_DIR/build:/qmk_firmware/.build"
+CMD="$CMD -v $SCRIPT_DIR/.build:/qmk_firmware/.build"
 CMD="$CMD -v $DIR:/qmk_firmware/keyboards/$BOARD/keymaps/$INTERNAL"
 
 for device in "${DEVICES[@]}"; do
