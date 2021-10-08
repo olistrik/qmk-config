@@ -42,7 +42,7 @@ if [[ ! -z "$2" ]]; then
   TARGET=$2
 fi
 
-INTERNAL="DOCKER_KEYMAP"
+INTERNAL="${DIR//\//\_}_$BOARD_$VARIANT"
 
 CMD="docker run -ti --init --privileged"
 
