@@ -1,3 +1,3 @@
-SRC += state.c oled.c
+SRC += state.c oled.c tetris.c
 EXTRAKEY_ENABLE = yes
 OLED_ENABLE = yes

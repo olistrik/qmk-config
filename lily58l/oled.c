@@ -3,6 +3,7 @@
 
 #include "oled.h"
 #include "state.h"
+#include "tetris.h"
 
 
 #ifdef OLED_ENABLE
@@ -111,8 +112,11 @@ void render_default_layer_state(void) {
   case _ADJUST:
     oled_write_ln_P(PSTR("ADJ"), false);
     break;
+  case _FUNC:
+    oled_write_P(PSTR("FUNC"), false);
+    break;
   default:
-    oled_write_ln_P(PSTR("Undefined"), false);
+    oled_write_P(PSTR("UNDEF"), false);
   }
 }
 
@@ -149,13 +153,15 @@ void render_status_main(void) {
   render_keylogger_status();
 }
 
-void oled_task_user(void) {
+void oled_tick() {
   update_log();
+
   if (is_keyboard_master()) {
     render_status_main();  // Renders the current keyboard state (layer, lock, caps, scroll, etc)
   } else {
     render_lily58_logo();
   }
 }
+
 
 #endif // OLED_ENABLE

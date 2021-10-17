@@ -21,12 +21,7 @@
 
 #include "oled.h"
 #include "state.h"
-
-/*
-enum custom_keycodes {
-  FN_TAB = SAFE_RANGE,
-};
-*/
+#include "tetris.h"
 
 #define XXXXXXXX XXXXXXX
 #define ________ _______
@@ -60,7 +55,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 /* LOWER
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |                    |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |   ~  |   !  |   @  |   #  |   $  |   %  |                    |   ^  |   &  |   *  |   (  |   )  |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -72,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                   `-----------------------------'         '------''--------------------'
  */
 [_LOWER] = LAYOUT(
-  ________,________,________,________,________,________,                    ________,________,________,________,________,________,
+  KC_F1   ,KC_F2   ,KC_F3   ,KC_F4   ,KC_F5   ,KC_F6   ,                    KC_F7   ,KC_F8   ,KC_F9   ,KC_F10  ,KC_F11  ,KC_F12  ,
   KC_TILDE,KC_EXLM ,KC_AT   ,KC_HASH ,KC_DLR  ,KC_PERC ,                    KC_CIRC ,KC_AMPR ,KC_ASTR ,KC_LPRN ,KC_RPRN ,________,
   ________,________,________,________,________,________,                    ________,KC_UNDS ,KC_PLUS ,KC_LCBR ,KC_RCBR ,KC_PIPE ,
   ________,________,________,________,________,________,________,  ________,________,________,________,________,________,________,
@@ -100,11 +95,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                              ________,________,________,________,  ________,________,________,________
 ),
 
-/* RAISE
+/* FUNC
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |      |      |      |      |      |      |                    |      |      |      |      |      | Bksp |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |      |      |      |      |      |Tetris|                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |      |      |      |      |      |-------.    ,-------| Left | Down |  Up  |Right |      |      |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
@@ -116,7 +111,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_FUNC] = LAYOUT(
   ________,________,________,________,________,________,                    ________,________,________,________,________,________,
-  ________,________,________,________,________,________,                    ________,________,________,________,________,________,
+  ________,________,________,________,________,TETRIS  ,                    ________,________,________,________,________,________,
   ________,________,________,________,________,________,                    KC_LEFT ,KC_DOWN ,KC_UP   ,KC_RIGHT,________,________,
   ________,________,________,________,________,________,________,  ________,________,________,________,________,________,________,
                              ________,________,________,________,  ________,________,________,________
@@ -144,8 +139,36 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 )
 };
 
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  #ifdef TETRIS_ENABLE
+  if (tetris_mode() || keycode == TETRIS) {
+    switch(keycode) {
+      case KC_A:
+        keycode = TET_L;
+        break;
+      case KC_D:
+        keycode = TET_R;
+        break;
+      case KC_S:
+        keycode = TET_D;
+        break;
+      case KC_E:
+        keycode = TET_RF;
+        break;
+      case KC_Q:
+        keycode = TET_RR;
+        break;
+      case KC_SPC:
+        keycode = TET_H;
+        break;
+    }
+
+    tetris_record_key(keycode, record->event.pressed);
+    return false;
+  }
+
+  #endif
+
   #ifdef OLED_ENABLE
   if (record->event.pressed) {
     add_keylog(keycode);
@@ -182,6 +205,17 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
       }
     }
     else {
+      #ifdef TETRIS_ENABLE
+      if (tetris_mode()) {
+        if (clockwise) {
+          tetris_record_key(TET_R, true);
+        } else {
+          tetris_record_key(TET_L, true);
+        }
+        return true;
+      }
+      #endif
+
       if (clockwise) {
         tap_code(KC_VOLU);
       } else {
@@ -207,5 +241,20 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     }
   }
   return true;
+}
+#endif
+
+
+#ifdef OLED_ENABLE
+void oled_task_user(void) {
+
+  #ifdef TETRIS_ENABLE
+  if(tetris_mode()) {
+    tetris_tick();
+    return;
+  }
+  #endif
+
+  oled_tick();
 }
 #endif
