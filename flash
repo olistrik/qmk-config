@@ -42,7 +42,7 @@ if [[ ! -z "$2" ]]; then
   TARGET=$2
 fi
 
-INTERNAL="${DIR//\//\_}_$BOARD_$VARIANT"
+INTERNAL="${DIR//\//\_}_$BOARD_${VARIANT//\//\_}"
 
 CMD="docker run -ti --init --privileged"
 
