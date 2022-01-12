@@ -112,6 +112,17 @@
 #define AUDIO_DAC_SAMPLE_MAX 2048U
 #endif
 
+// Debounce of 5ms has been causing me issues.
+
+#ifdef DEBOUNCE
+#undef DEBOUNCE // wtf planck ppl. why define DEBOUNCE to it's default value.
+#endif
+
+#define DEBOUNCE 10
+
+
+
+
 /*
  * MIDI options
  */
