@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #    define RGBLIGHT_SLEEP //  the RGB lighting will be switched off when the host goes to sleep
 #endif
 
-#define TETRIS_ENABLE
+// #define TETRIS_ENABLE
 
 // If you are using an Elite C rev3 on the slave side, uncomment the lines below:
 // #define SPLIT_USB_DETECT

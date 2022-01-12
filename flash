@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+LB=$'\n'
 SCRIPT_DIR=$(readlink -f ${BASH_SOURCE%/*})
 
 if [[ ! -f .env.local ]]; then
@@ -44,24 +44,39 @@ fi
 
 INTERNAL="${DIR//\//\_}_$BOARD_${VARIANT//\//\_}"
 
-CMD="docker run -ti --init --privileged"
+CMD_BUILDER=("docker run -ti --init --privileged")
 
 for group in "${ADD_GROUPS[@]}"; do
-  CMD="$CMD --group-add $group"
+  CMD_BUILDER+=("--group-add $group")
 done
 
-CMD="$CMD -v $SCRIPT_DIR/.build:/qmk_firmware/.build"
-CMD="$CMD -v $DIR:/qmk_firmware/keyboards/$BOARD/keymaps/$INTERNAL"
+CMD_BUILDER+=("-v $SCRIPT_DIR/.build:/qmk_firmware/.build")
+CMD_BUILDER+=("-v $DIR:/qmk_firmware/keyboards/$BOARD/keymaps/$INTERNAL")
 
 for device in "${DEVICES[@]}"; do
-  CMD="$CMD -v $device:$device"
+  CMD_BUILDER+=("-v $device:$device")
 done
 
-CMD="$CMD $IMAGE make $BOARD/$VARIANT:$INTERNAL"
-
-if [[ ! -z "$TARGET" ]]; then
-  CMD="$CMD:$TARGET"
+if [[ -d $DIR/overrides ]]; then
+  OVERRIDES=()
+  mapfile -d $'\0' OVERRIDES < <(find $DIR/overrides -type f -print0)
+  for custom in "${OVERRIDES[@]}"; do 
+    override=$(echo $custom | sed "s,$DIR/overrides,/qmk_firmware,g")
+    CMD_BUILDER+=("-v $custom:$override")
+  done
 fi
 
-echo $CMD
+CMD_BUILDER+=("$IMAGE make $BOARD/$VARIANT:$INTERNAL")
+
+if [[ ! -z "$TARGET" ]]; then
+  CMD_BUILDER[-1]+=":$TARGET"
+fi
+
+CMD=""
+
+for part in "${CMD_BUILDER[@]}"; do
+  echo $part
+  CMD="$CMD $part"
+done
+
 $CMD

@@ -177,7 +177,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   switch(keycode) {
     case LT(_FUNC, KC_TAB):
-      if(is_transport_connected()) {
+      // if(is_transport_connected()) {
+      if (true) {
         return true;
       }
       if (record->event.pressed) {

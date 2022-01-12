@@ -1,6 +1,9 @@
+#include "tetris.h"
+
+#ifdef TETRIS_ENABLE
+
 #include <string.h>
 #include QMK_KEYBOARD_H
-#include "tetris.h"
 
 typedef signed char sbyte;
 typedef uint8_t ubyte;
@@ -641,33 +644,5 @@ bool tetris_record_key(uint16_t keycode, bool pressed) {
   }
   return tetris_mode();
 }
-
-
-
-
-/*
-* 0
-* 1
-* 2
-* 3
-* 4
-* 5
-* 6
-* 7
-* 8
-* 9
-*10
-*11
-*12
-*13
-*14
-*15
-*16
-*17
-*18
-*19
-*20     .A.
-*21     AAA
-******  ...
-*/
+#endif
 
