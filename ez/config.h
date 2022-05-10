@@ -110,6 +110,7 @@
 
 #define STARTUP_SONG SONG(C_ZELDA_PUZZLE)
 #define AUDIO_DAC_SAMPLE_MAX 2048U
+#define AUDIO_CLICKY
 #endif
 
 // Debounce of 5ms has been causing me issues.

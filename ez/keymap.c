@@ -102,10 +102,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = LAYOUT_planck_grid(
-    _______, RESET,   DEBUG,   RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, KC_DEL ,
-    _______, _______, MU_MOD,  AU_ON,   AU_OFF,  _______, _______, _______, _______, _______, _______, _______,
-    _______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF , TERM_ON,TERM_OFF, _______, _______, _______,
-    _______, _______, _______, _______, _______, _______, KC_NO  , _______, _______, _______, _______, _______),
+    _______,RESET   ,DEBUG   ,_______ ,RGB_TOG ,TERM_ON ,TERM_OFF,_______ ,_______ ,_______ ,_______ ,_______ ,
+    _______,AU_TOG  ,MU_TOG  ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,
+    _______,CK_TOGG ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,
+    _______,_______ ,_______ ,_______ ,_______ ,_______ ,KC_NO   ,_______ ,_______ ,_______ ,_______ ,_______ ),
 
 /* Legacy FN
  * ,-----------------------------------------------------------------------------------.
@@ -155,10 +155,10 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
       COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0          ,COLOR_0 ,COLOR_0 ,COLOR_1 ,COLOR_1 ,COLOR_0 },
 
     [_ADJUST] = {
-      COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,
-      COLOR_1 ,COLOR_0 ,COLOR_0 ,COLOR_1 ,COLOR_1 ,COLOR_0 ,COLOR_1 ,COLOR_1 ,COLOR_1 ,COLOR_1 ,COLOR_0 ,COLOR_1 ,
-      COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_1 ,COLOR_1 ,COLOR_1 ,COLOR_1 ,COLOR_1 ,COLOR_1 ,COLOR_1 ,COLOR_0 ,COLOR_0 ,
-      COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_1 ,COLOR_0          ,COLOR_1 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 },
+      COLOR_0 ,COLOR_1 ,COLOR_1 ,COLOR_0 ,COLOR_1 ,COLOR_1 ,COLOR_1 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,
+      COLOR_0 ,COLOR_1 ,COLOR_1 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,
+      COLOR_0 ,COLOR_1 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,
+      COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0          ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 },
 
     [_FUNC] = {
       COLOR_0 ,COLOR_1 ,COLOR_1 ,COLOR_1 ,COLOR_1 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_0 ,COLOR_1 ,COLOR_1 ,
