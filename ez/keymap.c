@@ -35,6 +35,10 @@ enum planck_keycodes {
 #define RAISE MO(_RAISE)
 
 #define FN_TAB LT(_FUNC, KC_TAB)
+#define FN_LOW LT(_LOWER, KC_LEFT)
+#define FN_RAZ LT(_RAISE, KC_RIGHT)
+#define FN_LOW2 LT(_LOWER, KC_DOWN)
+#define FN_RAZ2 LT(_RAISE, KC_UP)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -92,18 +96,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Adjust (Lower + Raise)
  *                      v------------------------RGB CONTROL--------------------v
  * ,-----------------------------------------------------------------------------------.
- * |      | Reset|Debug | RGB  |RGBMOD| HUE+ | HUE- | SAT+ | SAT- |BRGTH+|BRGTH-|  Del |
+ * |      |      |      | RGB  |RGBMOD| HUE+ | HUE- | SAT+ | SAT- |BRGTH+|BRGTH-|  Del |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |MUSmod|Aud on|Audoff|AGnorm|AGswap|Qwerty|Colemk|Dvorak|Plover|      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |Voice-|Voice+|Mus on|Musoff|MIDIon|MIDIof|TermOn|TermOf|      |      |      |
+ * |      |Voice-|Voice+|Mus on|Musoff|MIDIon|MIDIof|TermOn|TermOf|      |      | Reset|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |             |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = LAYOUT_planck_grid(
-    _______,RESET   ,DEBUG   ,_______ ,RGB_TOG ,TERM_ON ,TERM_OFF,_______ ,_______ ,_______ ,_______ ,_______ ,
-    _______,AU_TOG  ,MU_TOG  ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,
+    _______,_______ ,_______ ,_______ ,RGB_TOG ,TERM_ON ,TERM_OFF,_______ ,_______ ,_______ ,_______ ,_______ ,
+    _______,AU_TOG  ,MU_TOG  ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,RESET   ,
     _______,CK_TOGG ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,
     _______,_______ ,_______ ,_______ ,_______ ,_______ ,KC_NO   ,_______ ,_______ ,_______ ,_______ ,_______ ),
 

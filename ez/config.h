@@ -64,7 +64,7 @@
     S__NOTE(_D6 ), \
     S__NOTE(_F6 ), \
     S__NOTE(_AS6), \
-    S__NOTE(_F6 )
+    S__NOTE(_F6 ),
 
 #define C_PACMAN_THEME \
     Q__NOTE(_B6), Q__NOTE(_B7), Q__NOTE(_FS6), Q__NOTE(_EF6), \
@@ -75,7 +75,7 @@
     E__NOTE(_B7), QD_NOTE(_FS6), H__NOTE(_EF7), \
     E__NOTE(_EF7), E__NOTE(_E7), Q__NOTE(_F7), \
     E__NOTE(_F7), E__NOTE(_FS7), Q__NOTE(_G7), \
-    E__NOTE(_G7), E__NOTE(_AF7), Q__NOTE(_A7), H__NOTE(_B7), \
+    E__NOTE(_G7), E__NOTE(_AF7), Q__NOTE(_A7), H__NOTE(_B7),
 
 #define C_RICK_ROLL      \
     Q__NOTE(_F4),      \
@@ -108,8 +108,8 @@
     W__NOTE(_C5),      \
     W__NOTE(_BF4),
 
-#define STARTUP_SONG SONG(C_ZELDA_PUZZLE)
-#define AUDIO_DAC_SAMPLE_MAX 2048U
+#define STARTUP_SONG SONG(C_MARIO_MUSHROOM)
+#define AUDIO_DAC_SAMPLE_MAX 2056U
 #define AUDIO_CLICKY
 #endif
 

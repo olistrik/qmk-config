@@ -3,7 +3,8 @@
 
 #include "oled.h"
 #include "state.h"
-#include "tetris.h"
+#include "bongo-cat.h"
+#include "luna.h"
 
 
 #ifdef OLED_ENABLE
@@ -55,109 +56,32 @@ void render_lily58_logo(void) {
     oled_write_raw_P(lily58_logo, sizeof(lily58_logo));
 }
 
+void render_wpm(int row) {
+	/* wpm counter */
+    uint8_t n = get_current_wpm();
+    char    wpm_str[4];
+    oled_set_cursor(0, row);
+    wpm_str[3] = '\0';
+    wpm_str[2] = '0' + n % 10;
+    wpm_str[1] = '0' + (n /= 10) % 10;
+    wpm_str[0] = '0' + n / 10;
+    oled_write(wpm_str, false);
 
-#    define KEYLOG_LEN 6
-char     keylog_str[KEYLOG_LEN] = {};
-uint8_t  keylogs_str_idx        = 0;
-uint16_t log_timer              = 0;
-
-const char code_to_name[60] = {
-  ' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f',
-  'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
-  'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-  '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-  'R', 'E', 'B', 'T', '_', '-', '=', '[', ']', '\\',
-  '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' '};
-
-void add_keylog(uint16_t keycode) {
-  if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) || (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) {
-    keycode = keycode & 0xFF;
-  }
-
-  for (uint8_t i = KEYLOG_LEN - 1; i > 0; i--) {
-    keylog_str[i] = keylog_str[i - 1];
-  }
-  if (keycode < 60) {
-    keylog_str[0] = code_to_name[keycode];
-  }
-  keylog_str[KEYLOG_LEN - 1] = 0;
-
-  log_timer = timer_read();
-}
-
-void update_log(void) {
-  if (timer_elapsed(log_timer) > 750) {
-    add_keylog(0);
-  }
-}
-
-void render_keylogger_status(void) {
-  oled_write_P(PSTR("KLogr"), false);
-  oled_write(keylog_str, false);
-}
-
-void render_default_layer_state(void) {
-  oled_write_P(PSTR("Layer"), false);
-  oled_write_P(PSTR(" "), false);
-  switch (get_highest_layer(layer_state)) {
-  case _QWERTY:
-    oled_write_P(PSTR("QRTY"), false);
-    break;
-  case _LOWER:
-    oled_write_ln_P(PSTR("LOW"), false);
-    break;
-  case _RAISE:
-    oled_write_P(PSTR("HIGH"), false);
-    break;
-  case _ADJUST:
-    oled_write_ln_P(PSTR("ADJ"), false);
-    break;
-  case _FUNC:
-    oled_write_P(PSTR("FUNC"), false);
-    break;
-  default:
-    oled_write_P(PSTR("UNDEF"), false);
-  }
-}
-
-void render_keylock_status(led_t led_state) {
-  oled_write_ln_P(PSTR("Lock"), false);
-  oled_write_P(PSTR(" "), false);
-  oled_write_P(PSTR("N"), led_state.num_lock);
-  oled_write_P(PSTR("C"), led_state.caps_lock);
-  oled_write_ln_P(PSTR("S"), led_state.scroll_lock);
-}
-
-void render_mod_status(uint8_t modifiers) {
-  oled_write_ln_P(PSTR("Mods"), false);
-  oled_write_P(PSTR(" "), false);
-  oled_write_P(PSTR("S"), (modifiers & MOD_MASK_SHIFT));
-  oled_write_P(PSTR("C"), (modifiers & MOD_MASK_CTRL));
-  oled_write_P(PSTR("A"), (modifiers & MOD_MASK_ALT));
-  oled_write_P(PSTR("G"), (modifiers & MOD_MASK_GUI));
-}
-
-void render_status_main(void) {
-  // Show keyboard layout
-  render_default_layer_state();
-  // Add a empty line
-  oled_write_P(PSTR("-----"), false);
-  // Show host keyboard led status
-  render_keylock_status(host_keyboard_led_state());
-  // Add a empty line
-  oled_write_P(PSTR("-----"), false);
-  // Show modifier status
-  render_mod_status(get_mods());
-  // Add a empty line
-  oled_write_P(PSTR("-----"), false);
-  render_keylogger_status();
+    oled_set_cursor(0, row+1);
+    oled_write(" wpm", false);
 }
 
 void oled_tick() {
-  update_log();
-
   if (is_keyboard_master()) {
-    render_status_main();  // Renders the current keyboard state (layer, lock, caps, scroll, etc)
+    // render_status_main();  // Renders the current keyboard state (layer, lock, caps, scroll, etc)
+#ifdef BONGO_ENABLE
+	render_bongo_cat();
+#elif defined LUNA_ENABLE
+	render_wpm(9);
+	render_luna(0, 13);
+#else
+	render_lily58_logo();
+#endif
   } else {
     render_lily58_logo();
   }

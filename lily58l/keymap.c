@@ -22,6 +22,7 @@
 #include "oled.h"
 #include "state.h"
 #include "tetris.h"
+#include "luna.h"
 
 #define XXXXXXXX XXXXXXX
 #define ________ _______
@@ -29,10 +30,10 @@
 #define LOWER MO(_LOWER)
 
 #define FN_TAB LT(_FUNC, KC_TAB)
-#define FN_LOW LT(_LOWER, KC_DOWN)
-#define FN_RAZ LT(_RAISE, KC_UP)
-#define FN_LOW2 LT(_LOWER, KC_LEFT)
-#define FN_RAZ2 LT(_RAISE, KC_RIGHT)
+#define FN_LOW LT(_LOWER, KC_LEFT)
+#define FN_RAZ LT(_RAISE, KC_RIGHT)
+#define FN_LOW2 LT(_LOWER, KC_DOWN)
+#define FN_RAZ2 LT(_RAISE, KC_UP)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -54,7 +55,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_ESC  ,KC_1    ,KC_2    ,KC_3    ,KC_4    ,KC_5    ,                    KC_6   ,KC_7    ,KC_8    ,KC_9    ,KC_0    ,KC_BSPC ,
   FN_TAB  ,KC_Q    ,KC_W    ,KC_E    ,KC_R    ,KC_T    ,                    KC_Y   ,KC_U    ,KC_I    ,KC_O    ,KC_P    ,KC_QUOT ,
   KC_LSFT ,KC_A    ,KC_S    ,KC_D    ,KC_F    ,KC_G    ,                    KC_H   ,KC_J    ,KC_K    ,KC_L    ,KC_SCLN ,KC_ENT  ,
-  KC_LCTRL,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,________,  ________,KC_N   ,KC_M    ,KC_COMM ,KC_DOT  ,KC_SLSH ,KC_RSFT ,
+  KC_LCTRL,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,KC_MPLY ,  KC_MPLY ,KC_N   ,KC_M    ,KC_COMM ,KC_DOT  ,KC_SLSH ,KC_RSFT ,
                             KC_LGUI  ,KC_LALT ,FN_LOW  ,KC_SPC  ,  KC_SPC  ,FN_RAZ ,KC_BSPC ,KC_RGUI
 ),
 /* LOWER
@@ -71,7 +72,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                   `-----------------------------'         '------''--------------------'
  */
 [_LOWER] = LAYOUT(
-  ________,________,________,________,________,________,                    ________,________,________,________,________,________,
+  KC_TILDE,KC_EXLM ,KC_AT   ,KC_HASH ,KC_DLR  ,KC_PERC ,                    KC_CIRC ,KC_AMPR ,KC_ASTR ,KC_LPRN ,KC_RPRN ,________,
   KC_TILDE,KC_EXLM ,KC_AT   ,KC_HASH ,KC_DLR  ,KC_PERC ,                    KC_CIRC ,KC_AMPR ,KC_ASTR ,KC_LPRN ,KC_RPRN ,________,
   KC_F1   ,KC_F2   ,KC_F3   ,KC_F4   ,KC_F5   ,KC_F6   ,                    ________,KC_UNDS ,KC_PLUS ,KC_LCBR ,KC_RCBR ,KC_PIPE ,
   KC_F7   ,KC_F8   ,KC_F9   ,KC_F10  ,KC_F11  ,KC_F12  ,________,  ________,________,________,________,________,________,________,
@@ -92,8 +93,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 
 [_RAISE] = LAYOUT(
-  ________,________,________,________,________,________,                    ________,________,________,________,________,________,
-  ________,KC_1    ,KC_2    ,KC_3    ,KC_4    ,KC_5    ,                    KC_6    ,KC_7    ,KC_8    ,KC_9    ,KC_0    ,________,
+  KC_GRAVE,________,________,________,________,________,                    ________,________,________,________,________,________,
+  KC_GRAVE,KC_1    ,KC_2    ,KC_3    ,KC_4    ,KC_5    ,                    KC_6    ,KC_7    ,KC_8    ,KC_9    ,KC_0    ,________,
   ________,________,________,________,________,________,                    ________,KC_MINUS,KC_EQUAL,KC_LBRC ,KC_RBRC ,KC_BSLS ,
   ________,________,________,________,________,________,________,  ________,________,________,________,________,________,________,
                              ________,________,FN_LOW2 ,________,  ________,________,________,________
@@ -114,7 +115,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 
 [_FUNC] = LAYOUT(
-  ________,________,________,________,________,________,                    ________,________,________,________,________,________,
+  ________,________,________,________,________,________,                    ________,________,________,________,________,KC_DEL  ,
   ________,________,________,________,________,TETRIS  ,                    ________,________,________,________,________,________,
   ________,________,________,________,________,________,                    KC_LEFT ,KC_DOWN ,KC_UP   ,KC_RIGHT,________,________,
   ________,________,________,________,________,________,________,  ________,________,________,________,________,________,________,
@@ -170,13 +171,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     tetris_record_key(keycode, record->event.pressed);
     return false;
   }
-
-  #endif
-
-  #ifdef OLED_ENABLE
-  if (record->event.pressed) {
-    add_keylog(keycode);
-  }
   #endif
 
   switch(keycode) {
@@ -191,6 +185,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         unregister_code(KC_TAB);
       }
       return false;
+	#ifdef LUNA_ENABLE
+	case KC_LCTRL:	
+	case KC_RCTRL:	
+	  setSneaking(record->event.pressed);
+	  return true;
+	case KC_SPC:	
+	  setJumping(record->event.pressed);
+	  return true;
+	#endif
     default:
       return true;
   }
