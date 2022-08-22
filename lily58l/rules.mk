@@ -1,4 +1,4 @@
-SRC += state.c oled.c bongo-cat.c luna.c tetris.c
+SRC += state.c oled.c luna.c tetris.c
 EXTRAFLAGS += -flto
 
 EXTRAKEY_ENABLE = yes

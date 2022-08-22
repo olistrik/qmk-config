@@ -2,6 +2,7 @@
 
 enum layers {
   _QWERTY,
+  _SINGLE,
   _LOWER,
   _RAISE,
   _ADJUST,
