@@ -35,13 +35,20 @@ enum planck_keycodes {
 #define RAISE MO(_RAISE)
 
 #define FN_TAB LT(_FUNC, KC_TAB)
+
+/*
 #define FN_LOW LT(_LOWER, KC_LEFT)
 #define FN_RAZ LT(_RAISE, KC_RIGHT)
 #define FN_LOW2 LT(_LOWER, KC_DOWN)
 #define FN_RAZ2 LT(_RAISE, KC_UP)
+*/
+
+#define FN_LOW LOWER
+#define FN_RAZ RAISE
+#define FN_LOW2 LOWER
+#define FN_RAZ2 RAISE 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-
 /* Qwerty
  * ,-----------------------------------------------------------------------------------.
  * | Esc  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
@@ -57,7 +64,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_ESC  ,KC_Q    ,KC_W    ,KC_E    ,KC_R    ,KC_T    ,KC_Y    ,KC_U    ,KC_I    ,KC_O    ,KC_P    ,KC_BSPC ,
 		FN_TAB  ,KC_A    ,KC_S    ,KC_D    ,KC_F    ,KC_G    ,KC_H    ,KC_J    ,KC_K    ,KC_L    ,KC_SCLN ,KC_QUOT ,
 		KC_LSFT ,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,KC_N    ,KC_M    ,KC_COMM ,KC_DOT  ,KC_SLSH ,KC_ENT  ,
-		KC_LCTL ,KC_LGUI ,KC_NO   ,KC_LALT ,FN_LOW  ,KC_SPC  ,KC_NO   ,FN_RAZ  ,KC_LEFT ,KC_DOWN ,KC_UP   ,KC_RGHT ),
+		KC_LCTL ,KC_LGUI ,KC_LGUI ,KC_LALT ,FN_LOW  ,KC_SPC  ,KC_NO   ,FN_RAZ  ,KC_LEFT ,KC_DOWN ,KC_UP   ,KC_RGHT ),
 
 /* Lower
  * ,-----------------------------------------------------------------------------------.
